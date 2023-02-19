@@ -58,130 +58,44 @@ require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const _ = require("lodash");
-const bcrypt = require("bcrypt");
 
 const database = require("./model/database");
-const News = database.newsModel;
-const Admin = database.adminModel;
 const Student = database.studentModel;
 
-users.forEach((user) => {
-    const newUser = new Student(user);
-    newUser.save(err => {
-        if (err) console.log(err);
-    });
-});
+const ArticlesController = require("./controllers/articles.controller");
+const AdminsController = require("./controllers/admins.controller");
+const StudentsController = require("./controllers/students.controller");
+
+// news.forEach((user) => {
+//     const newUser = new News(user);
+//     newUser.save(err => {
+//         if (err) console.log(err);
+//     });
+// });
 
 const app = express();
+
+// --------------------- Mmiddleware --------------------- \\
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-    News.find({}, (err, items) => {
-        if (err) {
-            console.log(err.message);
-        }
-        else if (items.length === 0) {
-            res.render("home", {news: news});
-        } else {
-            res.render("home", {news: items});
-        }
-    });
-});
+// --------------------- Articles --------------------- \\
 
-app.get("/articles/:articleTitle", (req, res) => {
-    const articleTitle = _.capitalize(req.params.articleTitle);
-    News.findOne({title: articleTitle}, (err, result) => {
-        if (err) {
-            console.log(err.message);
-            res.redirect("/");
-        } else if (result) {
-            res.render("article", {article: result});
-        } else {
-            res.render("article", {article: {
-                title: "This article doesn't exsists",
-                content: "Please go to the home page"
-                }
-            });
-        }
-    });
-});
+app.get("/", ArticlesController.GetArticles);
+app.get("/articles/:articleTitle", ArticlesController.GetOneArticle);
+app.get("/register", (req, res) => { res.render("register"); });
 
-app.get("/register", (req, res) => {
-    res.render("register");
-});
+// --------------------- Admins --------------------- \\
 
-app.post("/register", (req, res) => {
-    const body = req.body;
-    const email = body.email;
-    const rawPassword = body.password;
-    const firstName = body.firstName;
-    const lastName = body.lastName;
-    const token = body.token;
-    const id = body.idNumber;
-    const secondPass = body.passwordSecond;
-    if (rawPassword === secondPass) {
-        bcrypt.hash(rawPassword, 10, (err, hashedPass) => {
-            if (err) {
-                console.log(err.message);
-                res.redirect("/register");
-            } else {
-                const newAdmin = new Admin({
-                    email: email,
-                    password: hashedPass,
-                    fName: firstName,
-                    lName: lastName,
-                    token: token,
-                    idNumber: id
-                });
-                newAdmin.save(err => {
-                    if (err) {
-                        console.log(err.message);
-                    } else {
-                        res.redirect("/students");
-                    }
-                })
-            }
-        });
-    } else {
-        res.redirect("/register")
-    }
-    
-});
+app.post("/register", AdminsController.RegisterAdmin);
+app.post("/login", AdminsController.LoginAdmin);
+app.get("/login", (req, res) => { res.render("login") });
 
-app.get("/login", (req, res) => {
-    res.render("login")
-});
+// --------------------- Students --------------------- \\
 
-app.post("/login", (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    Admin.findOne({email: email}, (err, user) => {
-        if (err) console.log(err.message)
-        else if (user) {
-            bcrypt.compare(password, user.password, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    res.redirect("/login");
-                } 
-                else if (result) {
-                    res.render("students");
-                } else {
-                    res.redirect("/login");
-                }
-            });
-        }
-    });
-});
-
-app.get("/students", (req, res) => {
-    Student.find({}, (err, students) => {
-        res.render("students", {students: students});
-    });
-});
+app.get("/students", StudentsController.FindStudents);
 
 app.listen(process.env.PORT, () => {
     console.log("Server is listening!");

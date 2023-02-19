@@ -3,8 +3,8 @@
     <div id="students-container">
         <% students.forEach(student => { %>
             <h1><%=student.fName + student.lName%></h1>
-            <p>student.email</p>
-            <p>student.group</p>
+            <p><%=student.email%></p>
+            <p><%=student.group%></p>
         <% }) %>
     </div>
 

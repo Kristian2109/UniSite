@@ -1,4 +1,5 @@
 const News = require("../model/database").newsModel;
+const _ = require("lodash");
 
 function GetArticles(req, res) {
     News.find({}, (err, items) => {

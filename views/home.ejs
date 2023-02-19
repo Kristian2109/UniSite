@@ -6,8 +6,10 @@
         <% news.forEach(item => { %>
             <div class="article-item">
                 <!-- <div class="article-content"> -->
-                    <% const firstImgFileName = item.images[0].relativePath; %>
-                    <img class="article-img" src="images/newsImages/<%=firstImgFileName%>" alt="<%=item.images[0].title%>">
+                    <% if (item.images.length > 0) { %>
+                        <% const firstImgFileName = item.images[0].relativePath; %>
+                        <img class="article-img" src="images/newsImages/<%=firstImgFileName%>" alt="<%=item.images[0].title%>">    
+                    <% } %>
                     <h3 class="article-title">
                         <%= item.title %>
                     </h3>
