@@ -32,6 +32,13 @@ body {
     color: white;
 }
 
+#header-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 7%;
+}
+
 /* -------------- Home Articles-------------- */
 
 #article-container {
@@ -92,6 +99,65 @@ body {
 
 .full-img {
     width: 80%;
+}
+
+/* -------------- Register -------------- */
+
+#register-container {
+    margin: 4rem 30%;
+}
+
+#register-container .form-row {
+    margin: 1rem auto;
+}
+
+#register-container label {
+    font-weight: 500;
+}
+
+#register-container h1 {
+    text-align: center;
+}
+
+#register-container .btn {
+    font-weight: 700;
+}
+
+#register-container .btn:hover {
+    color: white;
+}
+
+/* -------------- Login -------------- */
+
+#login-container {
+    margin: 3rem 37% 10.3rem;
+    text-align: center;
+}
+
+#login-container h1 {
+    margin: 2rem auto;
+}
+
+#login-container .form-group {
+    margin: 2rem auto;
+}
+
+#login-container img {
+    border-radius: 50%;
+    width: 35%;
+    margin: 2rem auto;
+}
+
+@media screen and (max-width: 1200px) {
+    #login-container {
+        margin: 2rem 32%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #login-container {
+        margin: 2rem 20%;
+    }
 }
 
 /* -------------- Footer -------------- */

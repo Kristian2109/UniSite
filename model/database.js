@@ -13,6 +13,17 @@ mongoose.connect("mongodb://127.0.0.1/studentInformationDB", (err) => {
     }
 });
 
+const adminSchema = new mongoose.Schema({
+    fName: String,
+    lName: String,
+    email: String,
+    password: String,
+    idNumber: String,
+    token: String
+});
+const Admin = mongoose.model("Admin", adminSchema);
+
+
 const imageSchema = new mongoose.Schema({
     title: String,
     relativePath: String
@@ -29,13 +40,7 @@ const newsSchema = new mongoose.Schema({
 
 const News = mongoose.model("New", newsSchema);
 
-// News.findOne({title: "News 1"}, (err, item) => {
-//     item.images[0].title = "Breaking news";
-//     item.save((err) => {
-//         if (err)  console.log(err.message);
-//     });
-// })
-
 module.exports = {
-    newsModel: News
+    newsModel: News,
+    adminModel: Admin
 }

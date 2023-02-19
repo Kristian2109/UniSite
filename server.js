@@ -26,9 +26,11 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("lodash");
+const bcrypt = require("bcrypt");
 
 const database = require("./model/database");
 const News = database.newsModel;
+const Admin = database.adminModel;
 
 const app = express();
 
@@ -67,7 +69,72 @@ app.get("/articles/:articleTitle", (req, res) => {
     });
 });
 
+app.get("/register", (req, res) => {
+    res.render("register");
+});
 
+app.post("/register", (req, res) => {
+    const body = req.body;
+    const email = body.email;
+    const rawPassword = body.password;
+    const firstName = body.firstName;
+    const lastName = body.lastName;
+    const token = body.token;
+    const id = body.idNumber;
+    const secondPass = body.passwordSecond;
+    if (rawPassword === secondPass) {
+        bcrypt.hash(rawPassword, 10, (err, hashedPass) => {
+            if (err) {
+                console.log(err.message);
+                res.redirect("/register");
+            } else {
+                const newAdmin = new Admin({
+                    email: email,
+                    password: hashedPass,
+                    fName: firstName,
+                    lName: lastName,
+                    token: token,
+                    idNumber: id
+                });
+                newAdmin.save(err => {
+                    if (err) {
+                        console.log(err.message);
+                    } else {
+                        res.redirect("/students");
+                    }
+                })
+            }
+        });
+    } else {
+        res.redirect("/register")
+    }
+    
+});
+
+app.get("/login", (req, res) => {
+    res.render("login")
+});
+
+app.post("/login", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    Admin.findOne({email: email}, (err, user) => {
+        if (err) console.log(err.message)
+        else if (user) {
+            bcrypt.compare(password, user.password, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.redirect("/login");
+                } 
+                else if (result) {
+                    res.render("students");
+                } else {
+                    res.redirect("/login");
+                }
+            });
+        }
+    });
+});
 
 app.listen(process.env.PORT, () => {
     console.log("Server is listening!");
