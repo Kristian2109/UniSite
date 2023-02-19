@@ -1,6 +1,23 @@
 <%- include("partials/header") %>
 
-
-
+    <div id="article-container">
+        <h2>Read some of the amazing news:</h2>
+        <hr>
+        <% news.forEach(item => { %>
+            <div class="article-item">
+                <!-- <div class="article-content"> -->
+                    <% const firstImgFileName = item.images[0].relativePath; %>
+                    <img class="article-img" src="images/newsImages/<%=firstImgFileName%>" alt="<%=item.images[0].title%>">
+                    <h3 class="article-title">
+                        <%= item.title %>
+                    </h3>
+                    <p class="article-content">
+                        <%= item.content.slice(0, 200) %>... <a href="/articles/<%=item.title%>"> Read more</a>
+                    </p>
+                <!-- </div> -->
+                <hr>
+            </div>
+        <%  }) %>
+    </div>
 
 <%- include("partials/footer") %>

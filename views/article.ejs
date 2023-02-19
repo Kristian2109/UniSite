@@ -1,0 +1,17 @@
+<%- include("partials/header") %>
+
+     <div id="article-container">
+        <h1 class="full-article-title"><%= article.title %></h1>
+        <hr>
+        <p class="full-article-content"><%= article.content %></p>
+        <div class="images-container">
+            <% article.images.forEach(image => { %>
+                <h3 class="img-title"><%=image.title%></h3>
+                <img class="full-img" src="/images/newsImages/<%=image.relativePath%>" alt="<%=image.title%>">
+            <% }); %>
+        </div>
+     </div>
+
+
+
+<%- include("partials/footer") %>
