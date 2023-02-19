@@ -21,6 +21,39 @@ const news = [
     }
 ]
 
+const users = [
+    {
+        fName: "First 1",
+        lName: "Last 1",
+        email: "user1@gmail.com",
+        group: 6
+    },
+    {
+        fName: "First 2",
+        lName: "Last 2",
+        email: "user2@gmail.com",
+        group: 6
+    },
+    {
+        fName: "First 2",
+        lName: "Last 2",
+        email: "user2@gmail.com",
+        group: 6
+    },
+    {
+        fName: "First 3",
+        lName: "Last 3",
+        email: "user3@gmail.com",
+        group: 6
+    },
+    {
+        fName: "First 4",
+        lName: "Last 4",
+        email: "user4@gmail.com",
+        group: 6
+    }
+]
+
 require("dotenv").config();
 
 const express = require("express");
@@ -31,6 +64,14 @@ const bcrypt = require("bcrypt");
 const database = require("./model/database");
 const News = database.newsModel;
 const Admin = database.adminModel;
+const Student = database.studentModel;
+
+users.forEach((user) => {
+    const newUser = new Student(user);
+    newUser.save(err => {
+        if (err) console.log(err);
+    });
+});
 
 const app = express();
 
@@ -133,6 +174,12 @@ app.post("/login", (req, res) => {
                 }
             });
         }
+    });
+});
+
+app.get("/students", (req, res) => {
+    Student.find({}, (err, students) => {
+        res.render("students", {students: students});
     });
 });
 

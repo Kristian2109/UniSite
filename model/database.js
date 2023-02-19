@@ -13,6 +13,10 @@ mongoose.connect("mongodb://127.0.0.1/studentInformationDB", (err) => {
     }
 });
 
+
+
+// ------------------ Admin ------------------
+
 const adminSchema = new mongoose.Schema({
     fName: String,
     lName: String,
@@ -23,6 +27,8 @@ const adminSchema = new mongoose.Schema({
 });
 const Admin = mongoose.model("Admin", adminSchema);
 
+
+// ------------------ News ------------------
 
 const imageSchema = new mongoose.Schema({
     title: String,
@@ -40,7 +46,31 @@ const newsSchema = new mongoose.Schema({
 
 const News = mongoose.model("New", newsSchema);
 
+// ------------------ Students ------------------
+
+const disciplineSchema = new mongoose.Schema({
+    name: String,
+    grades: [Number]
+});
+
+const studentsSchema = new mongoose.Schema({
+    fName: String,
+    lName: String,
+    email: String,
+    photoPath: String,
+    group: {
+        type: Number,
+        max: 10,
+        min: 1
+    },
+    specialty: String,
+    disciplines: [disciplineSchema]
+});
+
+const Student = mongoose.model("Student", studentsSchema);
+
 module.exports = {
     newsModel: News,
-    adminModel: Admin
+    adminModel: Admin,
+    studentModel: Student
 }
