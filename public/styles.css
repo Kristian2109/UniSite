@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Work+Sans:wght@600&display=swap');
 
 body {
     margin: 0;
@@ -158,6 +158,63 @@ body {
     #login-container {
         margin: 2rem 20%;
     }
+}
+
+/* -------------- Students -------------- */
+
+#students-container {
+    margin: 3rem 10%;
+}
+
+.columns-header p {
+    display: inline-block;
+    margin: auto 1.5rem;
+}
+
+p.img-header {
+    margin-left: 3rem;
+    margin-right: 3rem;
+}
+
+.header-line {
+    height: 10px;
+	border: 0;
+	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}
+
+p.group {
+    margin-left: 0rem;
+}
+
+.student {
+    margin: 1rem auto;
+    height: 10rem;
+}
+
+.bottom-line {
+    height: 10px;
+    border: 0;
+    box-shadow: 0 5px 5px -5px #d3d2d2 inset;
+}
+
+.student p, h4, img, a {
+    display: inline-block;
+    margin: auto 1.5rem;
+    font-weight: 600;
+}
+
+.student-img {
+    height: 6rem;
+    width: 6rem;
+}
+
+.rank {
+    color: #737373;
+    font: 600 30px/30px 'Work Sans';
+}
+
+.student:hover {
+    background-color: #FAD6A5;
 }
 
 /* -------------- Footer -------------- */

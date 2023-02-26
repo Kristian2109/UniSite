@@ -50,13 +50,15 @@ const News = mongoose.model("New", newsSchema);
 
 const disciplineSchema = new mongoose.Schema({
     name: String,
-    grades: [Number]
+    grades: [Number],
+    avgGradeDisc: Number
 });
 
 const studentsSchema = new mongoose.Schema({
     fName: String,
     lName: String,
     email: String,
+    idNumber: String,
     photoPath: String,
     group: {
         type: Number,
@@ -64,7 +66,8 @@ const studentsSchema = new mongoose.Schema({
         min: 1
     },
     specialty: String,
-    disciplines: [disciplineSchema]
+    disciplines: [disciplineSchema],
+    avgGrade: Number
 });
 
 const Student = mongoose.model("Student", studentsSchema);

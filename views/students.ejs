@@ -1,10 +1,29 @@
 <%- include("partials/header") %>
 
     <div id="students-container">
+        <div class="columns-header row">
+            <p class="img-header">Image</p>
+            <p class="col-lg-1">Rank</p>
+            <p class="col-lg-3">Name</p>
+            <p class="col-lg-1">Average Grade</p>
+            <p class="col-lg-2">Major</p>
+            <p class="group">Group</p>
+        </div>
+        <hr class="header-line">
+        <% let rank = 0; %>
         <% students.forEach(student => { %>
-            <h1><%=student.fName + student.lName%></h1>
-            <p><%=student.email%></p>
+        <div class="student row">
+            <% const imgName = student.photoPath; %>
+            <% rank++; %>
+            <img class="student-img" src="/images/<%=imgName%>" alt="imgName">
+            <p class="rank col-lg-1"><%=rank%></p>
+            <h4 class="student-name col-lg-3"><%=student.fName + " " + student.lName%></h4>
+            <p class="col-lg-1"><%=student.avgGrade%></p>
+            <p class="col-lg-2"><%=student.specialty%></p>
             <p><%=student.group%></p>
+            <a href="">Visit</a>
+        </div>
+        <hr class="bottom-line">
         <% }) %>
     </div>
 
