@@ -60,6 +60,7 @@ const studentsSchema = new mongoose.Schema({
     email: String,
     idNumber: String,
     photoPath: String,
+    rank: Number,
     group: {
         type: Number,
         max: 10,

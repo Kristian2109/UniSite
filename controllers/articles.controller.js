@@ -1,35 +1,40 @@
 const News = require("../model/database").newsModel;
 const _ = require("lodash");
 
-function GetArticles(req, res) {
-    News.find({}, (err, items) => {
-        if (err) {
-            console.log(err.message);
-        }
-        else if (items.length === 0) {
-            res.render("home", {news: []});
-        } else {
-            res.render("home", {news: items});
-        }
-    });
+async function GetArticles(req, res) {
+    try {
+        const articles = await News.find({});
+
+        return res.render("home", { news: articles });
+
+    } catch (err) {
+        console.error(err);
+        res.render("home");
+    }
 }
 
-function GetOneArticle(req, res) {
-    const articleTitle = _.capitalize(req.params.articleTitle);
-    News.findOne({title: articleTitle}, (err, result) => {
-        if (err) {
-            console.log(err.message);
-            res.redirect("/");
-        } else if (result) {
-            res.render("article", {article: result});
-        } else {
-            res.render("article", {article: {
-                title: "This article doesn't exsists",
-                content: "Please go to the home page"
+async function GetOneArticle(req, res) {
+    try {
+        const articleTitle = _.capitalize(req.params.articleTitle);
+        const article = await News.findOne({title: articleTitle});
+        console.log(article);
+
+        if (!article) {
+            return res.render("article", {article: {
+                title: "This article doesn't exsists!",
+                content: "Please go to the home page.",
+                images: [] 
                 }
             });
         }
-    });
+
+        return res.render("article", {article});
+
+    } catch (err) {
+        console.error(err);
+        res.redirect("/");
+    }
+    
 }
 
 module.exports = {

@@ -1,58 +1,54 @@
 const Admin = require("../model/database").adminModel;
 const bcrypt = require("bcrypt");
 
-function RegisterAdmin(req, res) {
-    const body = req.body;
-    const firstPass = body.password;
-    const secondPass = body.passwordSecond;
+async function RegisterAdmin(req, res) {
+    const { email, password, passwordSecond, firstName, lastName, token, idNumber } = req.body;
 
-    if (firstPass === secondPass) {
-        bcrypt.hash(firstPass, 10, (err, hashedPass) => {
-            if (err) {
-                console.log(err.message);
-                res.redirect("/register");
-            } else {
-                const newAdmin = new Admin({
-                    email: body.email,
-                    password: hashedPass,
-                    fName: body.firstName,
-                    lName: body.lastName,
-                    token: body.token,
-                    idNumber: body.idNumber
-                });
-                newAdmin.save(err => {
-                    if (err) {
-                        console.log(err.message);
-                    } else {
-                        res.redirect("/students");
-                    }
-                })
-            }
+    if (password !== passwordSecond) {
+        return res.redirect("/register");
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const admin = new Admin({
+            email,
+            password: hashedPassword,
+            fName: firstName,
+            lName: lastName,
+            token,
+            idNumber
         });
-    } else {
-        res.redirect("/register")
+
+        await admin.save();
+
+        res.redirect("/students");
+    } catch (error) {
+        console.error(error);
+        res.redirect("/register");
     }
 }
 
-function LoginAdmin(req, res) {
-    const email = req.body.email;
-    const password = req.body.password;
-    Admin.findOne({email: email}, (err, user) => {
-        if (err) console.log(err.message)
-        else if (user) {
-            bcrypt.compare(password, user.password, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    res.redirect("/login");
-                } 
-                else if (result) {
-                    res.redirect("/students");
-                } else {
-                    res.redirect("/login");
-                }
-            });
+async function LoginAdmin(req, res) {
+    const { email, password } = req.body;
+
+    try {
+        const user = await Admin.findOne({ email });
+
+        if (!user) {
+            return res.redirect("/login");
         }
-    });
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (isPasswordValid) {
+            return res.redirect("/students");
+        } else {
+            return res.redirect("/login");
+        }
+    } catch (error) {
+        console.error(error);
+        res.redirect("/login");
+    }
 }
 
 module.exports = {

@@ -30,6 +30,7 @@ app.get("/login", (req, res) => { res.render("login") });
 // --------------------- Students --------------------- \\
 
 app.get("/students", StudentsController.FindStudents);
+app.get("/students/:id", StudentsController.FindOneStudent);
 
 app.listen(process.env.PORT, () => {
     console.log("Server is listening!");
