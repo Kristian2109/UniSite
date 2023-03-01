@@ -18,6 +18,7 @@ mongoose.connect("mongodb://127.0.0.1/studentInformationDB", (err) => {
 // ------------------ Admin ------------------
 
 const adminSchema = new mongoose.Schema({
+    username: String,
     fName: String,
     lName: String,
     email: String,
@@ -25,6 +26,9 @@ const adminSchema = new mongoose.Schema({
     idNumber: String,
     token: String
 });
+
+adminSchema.plugin(mongooseLocal);
+
 const Admin = mongoose.model("Admin", adminSchema);
 
 

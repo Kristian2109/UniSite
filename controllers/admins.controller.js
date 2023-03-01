@@ -1,5 +1,7 @@
 const Admin = require("../model/database").adminModel;
 const bcrypt = require("bcrypt");
+const passport = require("passport");
+
 
 async function RegisterAdmin(req, res) {
     const { email, password, passwordSecond, firstName, lastName, token, idNumber } = req.body;
@@ -9,22 +11,32 @@ async function RegisterAdmin(req, res) {
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // const hashedPassword = await bcrypt.hash(password, 10);
         const admin = new Admin({
+            username: idNumber,
             email,
-            password: hashedPassword,
             fName: firstName,
             lName: lastName,
             token,
             idNumber
         });
 
-        await admin.save();
-
-        res.redirect("/students");
+        //await Admin.register(admin, password).then((err, user) => {})
+        Admin.register(admin, password, (err, user) => {
+            if (err) {
+                console.log(err.message);
+                return res.redirect("/register");
+            }
+            else {
+                passport.authenticate("local")(req, res, () => {
+                    console.log("User authenticated!");
+                    return res.redirect("/students");
+                });
+            }
+        });
     } catch (error) {
         console.error(error);
-        res.redirect("/register");
+        return res.redirect("/register");
     }
 }
 
