@@ -4,7 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
-const passportLocal = require("passport-local");
+const LocalStrategy = require("passport-local").Strategy;
 const database = require("./model/database");
 
 const ArticlesController = require("./controllers/articles.controller");
@@ -21,7 +21,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.use(session({
-    secret: "My little secret.",
+    secret: process.env.COOKIE_SECRET,
     saveUninitialized: false,
     resave: false
 }));
@@ -31,7 +31,27 @@ app.use(passport.session());
 
 const Admin = database.adminModel;
 
-passport.use(Admin.createStrategy());
+passport.use(new LocalStrategy({
+    usernameField: "email",
+    passwordField: "password"
+}, async (username, password, done) => {
+    try {
+        const admin = await Admin.findOne({email: username});
+        if (!admin) { return done(null, false); }
+        admin.authenticate(password, (err, thisModel, passwordErr) => {
+            if (passwordErr) {
+                console.log(err.message);
+                return done(err);
+            }
+            if (thisModel) {
+                done(null, admin);
+            }
+        })
+    } catch (err) {
+        console.log(err.message);
+        return done(err);
+    }
+}));
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -50,86 +70,13 @@ app.get("/articles/:articleTitle", ArticlesController.GetOneArticle);
 
 // --------------------- Admins --------------------- \\
 
-app.post("/register", (req, res) => {
-    const { email, password, passwordSecond, firstName, lastName, token, idNumber } = req.body;
-
-    if (password !== passwordSecond) {
-        res.redirect("/register");
-    }
-        // const hashedPassword = await bcrypt.hash(password, 10);
-    const admin = new Admin({
-        username: idNumber,
-        email,
-        fName: firstName,
-        lName: lastName,
-        token,
-        idNumber
-    });
-
-    //await Admin.register(admin, password).then((err, user) => {})
-    Admin.register(admin, password, (err, user) => {
-        console.log(user);
-        if (err) {
-            console.log(err.message);
-        }
-        else {
-            passport.authenticate("local", (error, user, info) => {
-                console.log(error);
-                console.log(user);
-                console.log(info);
-          
-                if (error) {
-                  res.status(401).send(error);
-                } else if (!user) {
-                  res.status(401).send(info);
-                } else {
-                  next();
-                }
-          
-                res.status(401).send(info)
-            })(req, res, () => {
-                console.log("User authenticated!");
-                res.redirect("/students");
-            });
-        }
-    });
-});
-
 app.get("/register", (req, res) => { res.render("register"); });
-app.post("/login", (req, res) => {
-    const admin = new Admin({
-        username: req.body.username,
-        password: req.body.password
-    });
+app.post("/register", AdminsController.RegisterAdmin);
 
-    req.logIn(admin, (err) => {
-        console.log(req.isAuthenticated());
-        if (err) {
-            console.log(err);
-            res.redirect("/");
-        } else {
-            passport.authenticate("local", (error, user, info) => {
-                console.log(info);
-                if (error) {
-                    console.log(error);
-                    console.log(user);
-                    console.log(info);
-              
-                    if (error) {
-                      res.status(401).send(error);
-                    } else if (!user) {
-                      res.status(401).send(info);
-                    } else {
-                      next();
-                    }
-                }
-            })(req, res, () => {
-                res.redirect("/students");
-            });
-        }
-    })
-});
-app.get("/login", (req, res) => { res.render("login") });
+app.get("/login", AdminsController.RenderLogInPage);
+app.post("/login", AdminsController.LoginAdmin);
+
+app.get("/logout", AdminsController.LogOutAdmin)
 
 // --------------------- Students --------------------- \\
 

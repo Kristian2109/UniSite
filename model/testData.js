@@ -10,7 +10,6 @@ const womenSecondNames = ["Ivanova", "Petrova", "Georgieva", "Alexandrova", "Dim
 const specialties = ["Informatics", "Philosophy", "Psychology", "Mathematics", "Engineering", "Medicine"];
 const subjects = ["Math", "Design", "English", "Sport", "Algorithms", "Statistics", "Economy", "Algebra", "Discrete Math", "Geography", "Artificial Intelligence", "Databases", "Anatomy"];
 
-
 const randomFName = menFirstNames[WholeRandom(menFirstNames.length - 1)];
 const randomLName = menSecondNames[WholeRandom(menSecondNames.length - 1)];
 

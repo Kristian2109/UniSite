@@ -13,8 +13,7 @@ async function RegisterAdmin(req, res) {
     try {
         // const hashedPassword = await bcrypt.hash(password, 10);
         const admin = new Admin({
-            username: idNumber,
-            email,
+            username: email,
             fName: firstName,
             lName: lastName,
             token,
@@ -23,9 +22,10 @@ async function RegisterAdmin(req, res) {
 
         //await Admin.register(admin, password).then((err, user) => {})
         Admin.register(admin, password, (err, user) => {
+            console.log(user);
             if (err) {
                 console.log(err.message);
-                return res.redirect("/register");
+                return res.redirect("/home");
             }
             else {
                 passport.authenticate("local")(req, res, () => {
@@ -41,29 +41,51 @@ async function RegisterAdmin(req, res) {
 }
 
 async function LoginAdmin(req, res) {
-    const { email, password } = req.body;
-
     try {
-        const user = await Admin.findOne({ email });
-
-        if (!user) {
-            return res.redirect("/login");
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (isPasswordValid) {
-            return res.redirect("/students");
-        } else {
-            return res.redirect("/login");
-        }
+        const admin = new Admin({
+            username: req.body.email,
+            password: req.body.password
+        });
+    
+        req.logIn(admin, (err) => {
+            if (err) {
+                console.log(err);
+                return res.redirect("/");
+            } else {
+                passport.authenticate("local")(req, res, () => {
+                    return res.redirect("/students");
+                });
+            }
+        })
     } catch (error) {
-        console.error(error);
-        res.redirect("/login");
+        console.log(error);
+        return res.redirect("/login");
     }
+}
+
+function RenderLogInPage(req, res) {
+    try {
+        if (!req.isAuthenticated()) { return res.render("login") };
+        return res.redirect("/students");
+
+    } catch (err) {
+        console.log(err.message);
+        return res.redirect("/");
+    }
+}
+
+function LogOutAdmin(req, res) {
+    req.logOut((err) => {
+        if (err) {
+            console.log(err.message);
+        }
+        return res.redirec("/home");
+    });
 }
 
 module.exports = {
     RegisterAdmin,
-    LoginAdmin
+    LoginAdmin,
+    RenderLogInPage,
+    LogOutAdmin
 }
