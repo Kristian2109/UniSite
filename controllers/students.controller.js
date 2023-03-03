@@ -30,13 +30,18 @@ async function FindStudentsPage(req, res) {
 async function FindOneStudent(req, res) {
     try {
         const id = req.params.id;
+        const admin = req.user;
         const student = await Student.findById(id);
-        res.render("student", {student});
+        res.render("student", {student, admin});
     } catch (error) {
         console.log(error);
         res.redirect("/");
     }
+}
 
+async function ModifyStudent(req, res) {
+    console.log(req.body);
+    res.redirect("/students");
 }
 
 // function RandomTrueOrFalse() {
@@ -56,5 +61,6 @@ async function FindOneStudent(req, res) {
 module.exports = {
     FindStudents,
     FindStudentsPage,
-    FindOneStudent
+    FindOneStudent,
+    ModifyStudent
 }

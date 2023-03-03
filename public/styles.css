@@ -39,6 +39,17 @@ body {
     width: 7%;
 }
 
+#logout-form {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.logout-btn {
+    border: solid;
+    border-width: 2px;
+    font-weight: 500;
+}
+
 /* -------------- Home Articles-------------- */
 
 #article-container {

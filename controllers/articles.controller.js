@@ -4,8 +4,8 @@ const _ = require("lodash");
 async function GetArticles(req, res) {
     try {
         const articles = await News.find({});
-
-        return res.render("home", { news: articles });
+        const admin = req.user;
+        return res.render("home", { news: articles, admin });
 
     } catch (err) {
         console.error(err);

@@ -4,17 +4,20 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const database = require("./model/database");
+const https = require("https");
+const fs = require("fs");
+//const helmet = require("helmet");
 
 const ArticlesController = require("./controllers/articles.controller");
 const AdminsController = require("./controllers/admins.controller");
 const StudentsController = require("./controllers/students.controller");
+const PORT = process.env.PORT;
 
 const app = express();
 
 // --------------------- Middleware --------------------- \\
 
+//app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json())
 app.use(express.static("public"));
@@ -28,40 +31,6 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-const Admin = database.adminModel;
-
-passport.use(new LocalStrategy({
-    usernameField: "email",
-    passwordField: "password"
-}, async (username, password, done) => {
-    try {
-        const admin = await Admin.findOne({email: username});
-        if (!admin) { return done(null, false); }
-        admin.authenticate(password, (err, thisModel, passwordErr) => {
-            if (passwordErr) {
-                console.log(err.message);
-                return done(err);
-            }
-            if (thisModel) {
-                done(null, admin);
-            }
-        })
-    } catch (err) {
-        console.log(err.message);
-        return done(err);
-    }
-}));
-
-passport.serializeUser(function(user, done) {
-    done(null, user.id);
-  });
-  
-passport.deserializeUser(function(id, done) {
-    Admin.findById(id, function(err, user) {
-        done(err, user);
-    });
-});
 
 // --------------------- Articles --------------------- \\
 
@@ -82,7 +51,11 @@ app.get("/logout", AdminsController.LogOutAdmin)
 
 app.get("/students", StudentsController.FindStudents);
 app.get("/students/:id", StudentsController.FindOneStudent);
+app.post("/modifyStudent", StudentsController.ModifyStudent)
 
-app.listen(process.env.PORT, () => {
-    console.log("Server is listening!");
+https.createServer({
+    key: fs.readFileSync("key.pem"),
+    cert: fs.readFileSync("cert.pem")
+}, app).listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}!`);
 });

@@ -1,6 +1,39 @@
 const Admin = require("../model/database").adminModel;
 const bcrypt = require("bcrypt");
 const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+
+passport.use(new LocalStrategy({
+    usernameField: "email",
+    passwordField: "password"
+}, async (username, password, done) => {
+    try {
+        const admin = await Admin.findOne({email: username});
+        if (!admin) { return done(null, false); }
+        admin.authenticate(password, (err, thisModel, passwordErr) => {
+            if (passwordErr) {
+                console.log(err.message);
+                return done(err);
+            }
+            if (thisModel) {
+                return done(null, admin);
+            }
+        })
+    } catch (err) {
+        console.log(err.message);
+        return done(err);
+    }
+}));
+
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+  
+passport.deserializeUser(function(id, done) {
+    Admin.findById(id, function(err, user) {
+        done(err, user);
+    });
+});
 
 
 async function RegisterAdmin(req, res) {
@@ -11,7 +44,6 @@ async function RegisterAdmin(req, res) {
     }
 
     try {
-        // const hashedPassword = await bcrypt.hash(password, 10);
         const admin = new Admin({
             username: email,
             fName: firstName,
@@ -20,12 +52,11 @@ async function RegisterAdmin(req, res) {
             idNumber
         });
 
-        //await Admin.register(admin, password).then((err, user) => {})
         Admin.register(admin, password, (err, user) => {
             console.log(user);
             if (err) {
                 console.log(err.message);
-                return res.redirect("/home");
+                return res.redirect("/");
             }
             else {
                 passport.authenticate("local")(req, res, () => {
@@ -79,7 +110,7 @@ function LogOutAdmin(req, res) {
         if (err) {
             console.log(err.message);
         }
-        return res.redirec("/home");
+        return res.redirect("/");
     });
 }
 

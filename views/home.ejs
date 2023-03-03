@@ -21,9 +21,11 @@
             </div>
         <%  }) %>
     </div>
-    <form action="/logout" method="get">
-        <button class="btn btn-lg">Sign Out!</button>
-    </form>
+    <% if (admin) { %>
+        <form id="logout-form" action="/logout" method="get">
+            <button class="logout-btn btn btn-lg btn-warning">Log Out</button>
+        </form>
+    <% } %>
 
 
 <%- include("partials/footer") %>
