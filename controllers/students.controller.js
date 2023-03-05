@@ -1,4 +1,5 @@
 const Student = require("../model/database").studentModel;
+const Major = require("../model/database").majorModel;
 const { templateSettings } = require("lodash");
 const TestData = require("../model/testData");
 const CreateTestStudent = TestData.CreateRandomStudent;
@@ -49,7 +50,15 @@ async function FindOneStudent(req, res) {
         const id = req.params.id;
         const admin = req.user;
         const student = await Student.findById(id);
-        res.render("student", {student, admin});
+        let subjectsForAdding;
+        if (admin) {
+            const major = await Major.findOne({name: student.specialty});
+            subjectsForAdding = major.subjects;
+            student.disciplines.forEach(disc => {
+                subjectsForAdding.remove(disc.name);
+            });
+        }
+        res.render("student", {student, admin, subjectsForAdding});
     } catch (error) {
         console.log(error);
         res.redirect("/");

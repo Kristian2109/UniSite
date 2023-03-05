@@ -64,6 +64,28 @@ const majorSchema = new mongoose.Schema({
 
 const majorModel = mongoose.model("Major", majorSchema);
 
+const majors = {
+    Informatics: ["Programming", "Math", "Algebra", "Discrete math", "Algorithms", "Introduction to programming", "OOP", "Operational systems", "English"],
+    Philosophy: ["Literature", "Social science", "Behaviour", "Influence", "History", "English"],
+    Psychology: ["Literature", "Social science", "Behaviour", "Influence", "History", "English", "Psychology in business"],
+    Medicine: ["Biology", "Anathomy", "Psychology", "Practice disection", "Blood system", "Brain activity", "Emergency"],
+    Mathematics: ["Math", "Algebra", "Discrete math", "Algorithms", "Introduction to programmin", "OOP", "Operational systems", "English", "Mathematical strucutures"],
+    Engineering: ["Physics", "Mechanics", "Electronics", "Math", "English", "Computing"]
+}
+
+
+if (majorModel.find().length < 5) {
+    for (const major in majors) {
+        const newMajor = new majorModel({
+            name: major,
+            subjects: majors[major]
+        });
+        console.log(majors[major]);
+        newMajor.save()
+    }
+}
+
+
 const studentsSchema = new mongoose.Schema({
     fName: String,
     lName: String,
@@ -86,5 +108,6 @@ const Student = mongoose.model("Student", studentsSchema);
 module.exports = {
     newsModel: News,
     adminModel: Admin,
-    studentModel: Student
+    studentModel: Student,
+    majorModel
 }
