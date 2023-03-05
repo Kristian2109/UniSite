@@ -1,7 +1,5 @@
 <%- include("partials/header") %>
 
-
-
     <% photoName = student.photoPath; %>
     <div id="student-container" class="student-container">
         <img class="full-img-student" src="/images/<%=photoName%>" alt="<%=photoName%>">
@@ -69,7 +67,7 @@
                     <div class="form-group row">
                         <label for="major" class="col-sm-2 col-form-label">Add major</label>
                         <div class="col-sm-10">
-                          <input type="text" name="majorToDelete" class="form-control" placeholder="Enter major">
+                          <input type="text" name="majorToAdd" class="form-control" placeholder="Enter major">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-warning btm-large">Submit changes</button>
