@@ -1,0 +1,65 @@
+<%- include("partials/header") %>
+
+<div id="create-student-container">
+    <form action="/createStudent" method="post" enctype="multipart/form-data">
+        <div class="form-row">
+            <div class="col col-6">
+                <label for="firstName">First Name</label>
+                <input type="text" name="firstName" class="form-control" placeholder="First name">
+            </div>
+            <div class="col col-6">
+                <label for="firstName">Last Name</label>
+                <input type="text" name="lastName" class="form-control" placeholder="Last name">
+            </div>
+        </div>
+        <div class="form-row">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-row">
+            <div class="col-4">
+                <label for="idNumber">ID Number</label>
+                <input type="text" name="idNumber" class="form-control" placeholder="ID number">
+            </div>
+            <div class="col-2">
+                <label for="group">Group</label>
+                <select name="group" type="number" class="form-control">
+                    <% for (let i = 1; i <= 10; i++) { %>
+                        <option value="<%=i%>"><%=i%></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="col-6">
+                <label for="major">Major</label>
+                <select name="major" type="text" id="major" class="custom-select">
+                    <% const majors = ["Informatics", "Philosophy", "Psychology", "Mathematics", "Engineering", "Medicine"]; %>
+                    <% majors.forEach((major) => { %>
+                        <option value="<%=major%>"><%=major%></option>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-8 offset-2" for="inputGroupFile01">Upload student photo</label>
+            <div class="input-group col-8 offset-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Upload</span>
+                </div>
+                <div class="custom-file">
+                  <input name="studentPhoto" type="file" class="custom-file-input" id="inputGroupFile01">
+                  <label class="custom-file-label" id="custom-file-label" for="inputGroupFile01">Choose file</label>
+                </div>
+              </div>
+        </div>
+        <script>
+            document.getElementById('inputGroupFile01').addEventListener('change', () => {
+                var fileName = document.getElementById("inputGroupFile01").files[0].name;
+                document.getElementById("custom-file-label").innerHTML = fileName;
+            })
+        </script>
+        <div id="create-student-btn">
+            <button class="btn btn-warning" type="submit">Create Student</button>
+        </div>
+    </form>
+</div>
+<%- include("partials/footer") %>

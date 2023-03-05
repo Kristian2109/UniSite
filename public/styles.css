@@ -294,12 +294,27 @@ p.group {
     font-weight: 600;
 }
 
+/* -------------- Create student -------------- */
+
+#create-student-container {
+    margin: 5% 30%;
+}
+
+#create-student-container .form-row {
+    margin: 1.5rem auto;
+}
+
+#create-student-btn {
+    text-align: center;
+    margin: 2rem;
+}
+
 /* -------------- Footer -------------- */
 
 #footer-container {
     background-color: #FFB84C;
     text-align: center;
-    margin: auto 0;
+    margin: 0;
     height: 10rem;
     padding: 2rem;
 }

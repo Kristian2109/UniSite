@@ -1,11 +1,12 @@
 require("dotenv").config();
 
+const fs = require("fs");
+const https = require("https");
+const multer = require("multer");
 const express = require("express");
+const passport = require("passport");
 const bodyParser = require("body-parser");
 const session = require("express-session");
-const passport = require("passport");
-const https = require("https");
-const fs = require("fs");
 //const helmet = require("helmet");
 
 const ArticlesController = require("./controllers/articles.controller");
@@ -13,6 +14,16 @@ const AdminsController = require("./controllers/admins.controller");
 const StudentsController = require("./controllers/students.controller");
 const PORT = process.env.PORT;
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./public/images/studentImages/")
+    },
+    filename: (req, file, cb) => {
+        cb(null, req.body.idNumber + file.originalname);
+    }
+});
+
+const upload = multer({storage: storage});
 const app = express();
 
 // --------------------- Middleware --------------------- \\
@@ -51,7 +62,11 @@ app.get("/logout", AdminsController.LogOutAdmin)
 
 app.get("/students", StudentsController.FindStudents);
 app.get("/students/:id", StudentsController.FindOneStudent);
-app.post("/modifyStudent", StudentsController.ModifyStudent)
+
+app.post("/modifyStudent", StudentsController.ModifyStudent);
+
+app.get("/createStudent", StudentsController.RenderCreateStudentPage);
+app.post("/createStudent", upload.single("studentPhoto"), StudentsController.CreateStudent)
 
 https.createServer({
     key: fs.readFileSync("key.pem"),

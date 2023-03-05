@@ -2,7 +2,7 @@
 
     <% photoName = student.photoPath; %>
     <div id="student-container" class="student-container">
-        <img class="full-img-student" src="/images/<%=photoName%>" alt="<%=photoName%>">
+        <img class="full-img-student" src="/images/studentImages/<%=photoName%>" alt="<%=photoName%>">
         <% const fullName = student.fName + " " + student.lName; %>
         <div class="student-info">
             <div class="main-info">
@@ -11,7 +11,10 @@
             </div>
             <div class="info-container">
                 <div class="rank-group-grade">
-                    <p>Average grade: <span class="small-info"><%=student.avgGrade%></span></p>
+                    <p>Average grade: <span class="small-info">
+                        <% const avgGrade = (student.avgGrade == 0) ? "--" : student.avgGrade; %>
+                        <%= avgGrade %>
+                    </span></p>
                     <p>Group: <span class="small-info"><%=student.group%></span></p>
                     <p>Rank: <span class="small-info"></span></p>
                 </div>

@@ -57,6 +57,13 @@ const disciplineSchema = new mongoose.Schema({
     avgGradeDisc: Number
 });
 
+const majorSchema = new mongoose.Schema({
+    name: String,
+    subjects: [String],
+});
+
+const majorModel = mongoose.model("Major", majorSchema);
+
 const studentsSchema = new mongoose.Schema({
     fName: String,
     lName: String,
