@@ -19,7 +19,7 @@
 
 <h2>Students page</h2>
 <p>Ranklist with students sorted according to their average grade.</p>
-<p>Fun fact: I've use only one my photo to fill the students<p>
+<p>Fun fact: I've use only one my photo to fill the students. All the data is random.<p>
 <img src="sitePhotos/Students.png"/>
 
 <h2>Register page</h2>
