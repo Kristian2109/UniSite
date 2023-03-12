@@ -3,8 +3,8 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const mongooseLocal = require("passport-local-mongoose");
 
-mongoose.set('strictQuery', true);
-mongoose.connect("mongodb://127.0.0.1/studentInformationDB", (err) => {
+mongoose.set("strictQuery", true);
+mongoose.connect(process.env.MONGO_URL, (err) => {
     if (err) {
         console.log(err.message);
     }
@@ -13,9 +13,7 @@ mongoose.connect("mongodb://127.0.0.1/studentInformationDB", (err) => {
     }
 });
 
-
-
-// ------------------ Admin ------------------
+// ------------------ Admin schema ------------------
 
 const adminSchema = new mongoose.Schema({
     fName: String,
@@ -49,6 +47,7 @@ const newsSchema = new mongoose.Schema({
 
 const News = mongoose.model("New", newsSchema);
 
+
 // ------------------ Major Schema ------------------ \\
 
 const majorSchema = new mongoose.Schema({
@@ -80,7 +79,7 @@ if (majorModel.find().length < 5) {
 }
 
 
-// ------------------ Students Schmea ------------------ \\
+// ------------------ Disciplines Schmea ------------------ \\
 
 const disciplineSchema = new mongoose.Schema({
     name: String,
@@ -88,6 +87,7 @@ const disciplineSchema = new mongoose.Schema({
     avgGradeDisc: Number
 });
 
+// ------------------ Students Schmea ------------------ \\
 
 const studentsSchema = new mongoose.Schema({
     fName: String,
@@ -109,8 +109,8 @@ const studentsSchema = new mongoose.Schema({
 const Student = mongoose.model("Student", studentsSchema);
 
 module.exports = {
-    newsModel: News,
-    adminModel: Admin,
+    News,
+    Admin,
     Student,
     majorModel
 }

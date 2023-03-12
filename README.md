@@ -17,6 +17,11 @@
 <p>In the top left corner is https link, used to encrypt the connection<p>
 <img src="sitePhotos/ArticlesPage.png"/>
 
+<h2>Students page</h2>
+<p>Ranklist with students sorted according to their average grade.</p>
+<p>Fun fact: I've use only one my photo to fill the students<p>
+<img src="sitePhotos/Students.png"/>
+
 <h2>Register page</h2>
 <p>We can register an admin who can edit the data.<p>
 <p>We save the password in the database encrypted and hashed<p>
@@ -41,3 +46,7 @@
 <h2>Cookies</h2>
 <p>We store the session<p>
 <img src="sitePhotos/Cookies.png"/>
+
+<h5>Notes:</h5>
+<p>Important keys are in the environment file.</p>
+<p>There is a test data file, which enables us to create random students.</p>

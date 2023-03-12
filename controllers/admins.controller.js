@@ -1,4 +1,4 @@
-const Admin = require("../model/database").adminModel;
+const { Admin } = require("../model/database");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
