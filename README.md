@@ -15,11 +15,16 @@
 <h2>Home page</h2>
 <p>Home page with articles where you can choose to read the full acrticles.</p>
 <p>In the top left corner is https link, used to encrypt the connection<p>
-<img src="sitePhotos/LoginPage.png"/>
+<img src="sitePhotos/ArticlesPage.png"/>
 
 <h2>Register page</h2>
 <p>We can register an admin who can edit the data.<p>
+<p>We save the password in the database encrypted and hashed<p>
 <img src="sitePhotos/RegisterAdminPage.png"/>
+
+<h2>Login page</h2>
+<p>We can register an admin who can edit the data.<p>
+<img src="sitePhotos/LoginPage.png"/>
 
 <h2>Student page</h2>
 <p>Student with his notes for every discipline as his average note<p>
