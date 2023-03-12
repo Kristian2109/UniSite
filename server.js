@@ -12,6 +12,7 @@ const session = require("express-session");
 const ArticlesController = require("./controllers/articles.controller");
 const AdminsController = require("./controllers/admins.controller");
 const StudentsController = require("./controllers/students.controller");
+
 const PORT = process.env.PORT;
 
 const storage = multer.diskStorage({
@@ -68,9 +69,12 @@ app.post("/modifyStudent", StudentsController.ModifyStudent);
 app.get("/createStudent", StudentsController.RenderCreateStudentPage);
 app.post("/createStudent", upload.single("studentPhoto"), StudentsController.CreateStudent)
 
-https.createServer({
-    key: fs.readFileSync("key.pem"),
-    cert: fs.readFileSync("cert.pem")
-}, app).listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}!`);
-});
+// https.createServer({
+//     key: fs.readFileSync("key.pem"),
+//     cert: fs.readFileSync("cert.pem")
+// }, app).listen(PORT, () => {
+//     console.log(`Server is listening on port ${PORT}!`);
+// });
+app.listen(PORT, () => {
+        console.log(`Server is listening on port ${PORT}!`);
+    });
