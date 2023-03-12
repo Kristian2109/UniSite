@@ -1,5 +1,4 @@
 const Admin = require("../model/database").adminModel;
-const bcrypt = require("bcrypt");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
@@ -27,14 +26,13 @@ passport.use(new LocalStrategy({
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
-  });
+});
   
 passport.deserializeUser(function(id, done) {
     Admin.findById(id, function(err, user) {
         done(err, user);
     });
 });
-
 
 async function RegisterAdmin(req, res) {
     const { email, password, passwordSecond, firstName, lastName, token, idNumber } = req.body;

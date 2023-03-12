@@ -1,7 +1,7 @@
 <%- include("partials/header") %>
 
-    <% photoName = student.photoPath; %>
     <div id="student-container" class="student-container">
+        <% photoName = student.photoPath; %>
         <img class="full-img-student" src="/images/studentImages/<%=photoName%>" alt="<%=photoName%>">
         <% const fullName = student.fName + " " + student.lName; %>
         <div class="student-info">
@@ -30,13 +30,18 @@
                         <% student.disciplines.forEach(item => { %>
                             <div class="row">
                                 <p class="col grade"><%=item.name%></p>
-                                <p class="col"><%=item.avgGradeDisc%></p>
-                                <p class="col"><%item.grades.forEach(grade => { %>
-                                    <%=grade%>
-                                    <% if (grade !== item.grades[item.grades.length - 1]) { %>
-                                        <%=", "%>
+                                <p class="col">
+                                    <% const avgGradeDisc = (item.avgGradeDisc == 0) ? "--" : item.avgGradeDisc; %>
+                                    <%= avgGradeDisc %>
+                                </p>
+                                <p class="col">
+                                    <% for (let i = 0; i < item.grades.length; i++) { %>
+                                        <%= item.grades[i] %>
+                                        <% if (i != item.grades.length -1) { %>
+                                            <%= "," %>
+                                        <% } %>
                                     <% } %>
-                                <% })%></p>
+                                </p>
                             </div>
                             <hr>
                         <% }) %>
@@ -52,8 +57,8 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label left-align">Add note</label>
                         <div class="col-sm-6">
-                          <select type="text" name="majorAddNote" class="form-control" placeholder="Enter major">
-                            <option value="">Empthy</option>
+                          <select type="text" name="disciplineAddNote" class="form-control" placeholder="Enter major">
+                            <option value=""></option>
                                 <% student.disciplines.forEach(item => { %>
                                     <option value="<%=item.name%>"><%=item.name%></option>
                                 <% }) %>
@@ -66,8 +71,8 @@
                     <div class="form-group row">
                         <label for="" class="col-sm-2 col-form-label left-align">Delete note</label>
                         <div class="col-sm-6">
-                            <select type="text" name="majorDeleteNote" class="form-control" placeholder="Enter major">
-                                <option value="">Empthy</option>
+                            <select type="text" name="disciplineDeleteNote" class="form-control" placeholder="Enter major">
+                                <option value=""></option>
                                 <% student.disciplines.forEach(item => { %>
                                     <option value="<%=item.name%>"><%=item.name%></option>
                                 <% }) %>
@@ -80,8 +85,8 @@
                     <div class="form-group row">
                         <label for="major" class="col-sm-2 col-form-label left-align">Add discipline</label>
                         <div class="col-sm-6">
-                            <select type="text" name="majorToAdd" class="form-control" placeholder="Enter major">
-                                <option value="">Empthy</option>
+                            <select type="text" name="disciplineToAdd" class="form-control" placeholder="Enter major">
+                                <option value=""></option>
                             <% subjectsForAdding.forEach(subject => { %>
                                 <option value="<%=subject%>"><%=subject%></option>
                             <% }) %>
@@ -93,7 +98,5 @@
             </div>
         <% } %> 
     </div>
-    
-
 
 <%- include("partials/footer") %>

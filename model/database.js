@@ -49,13 +49,7 @@ const newsSchema = new mongoose.Schema({
 
 const News = mongoose.model("New", newsSchema);
 
-// ------------------ Students ------------------
-
-const disciplineSchema = new mongoose.Schema({
-    name: String,
-    grades: [Number],
-    avgGradeDisc: Number
-});
+// ------------------ Major Schema ------------------ \\
 
 const majorSchema = new mongoose.Schema({
     name: String,
@@ -86,6 +80,15 @@ if (majorModel.find().length < 5) {
 }
 
 
+// ------------------ Students Schmea ------------------ \\
+
+const disciplineSchema = new mongoose.Schema({
+    name: String,
+    grades: [Number],
+    avgGradeDisc: Number
+});
+
+
 const studentsSchema = new mongoose.Schema({
     fName: String,
     lName: String,
@@ -108,6 +111,6 @@ const Student = mongoose.model("Student", studentsSchema);
 module.exports = {
     newsModel: News,
     adminModel: Admin,
-    studentModel: Student,
+    Student,
     majorModel
 }

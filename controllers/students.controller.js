@@ -1,25 +1,20 @@
-const Student = require("../model/database").studentModel;
-const Major = require("../model/database").majorModel;
-const { templateSettings } = require("lodash");
-const TestData = require("../model/testData");
-const CreateTestStudent = TestData.CreateRandomStudent;
-const SetPrecision = TestData.GetPrecision;
-const PRECISION = 2;
+const { Student, majorModel: Major } = require("../model/database");
+const studentMethods = require("../model/students.model");
 
-function GetIndexOfMajorByName(majors, nameToSearch) {
+
+// Minor helper function I don't want to import
+function FindDisciplineIndexByName(majors, nameToSearch) {
     for (let i = 0; i < majors.length; i++) {
         if (majors[i].name === nameToSearch) {
             return i;
         }
     }
     return -1;
-}
+} 
 
-function GetAvgGrade(grades) {
-    return grades.reduce((acc, grade) => acc + grade, 0) / grades.length;
-}
+// ------------- Render Students Controller ------------- \\
 
-async function FindStudents(req, res) {
+async function RenderStudentsPage(req, res) {
     try {
         const students = await Student.find({});
         const sortedStudents = students.sort((a, b) => b.avgGrade - a.avgGrade);
@@ -45,12 +40,15 @@ async function FindStudentsPage(req, res) {
     }
 }
 
-async function FindOneStudent(req, res) {
+// ------------- Render Single Student Controller ------------- \\
+
+async function RenderSigleStudentPage(req, res) {
     try {
         const id = req.params.id;
         const admin = req.user;
         const student = await Student.findById(id);
         let subjectsForAdding;
+
         if (admin) {
             const major = await Major.findOne({name: student.specialty});
             subjectsForAdding = major.subjects;
@@ -58,31 +56,42 @@ async function FindOneStudent(req, res) {
                 subjectsForAdding.remove(disc.name);
             });
         }
-        res.render("student", {student, admin, subjectsForAdding});
+
+        return res.render("student", {student, admin, subjectsForAdding});
     } catch (error) {
         console.log(error);
-        res.redirect("/");
+        return res.redirect("/");
     }
 }
 
+// ------------- Modify Student Controller ------------- \\
+
 async function ModifyStudent(req, res) {
     try {
-        const {studentId, majorAddNote, majorDeleteNote, noteToAdd: noteToAddString, noteToDelete: noteToDeleteString, majorToAdd} = req.body;
+        const {
+            studentId,
+            disciplineAddNote,
+            disciplineDeleteNote,
+            disciplineToAdd,
+            noteToAdd: noteToAddString,
+            noteToDelete: noteToDeleteString
+        } = req.body;
+
         let student = await Student.findById(studentId);
 
-        if (majorToAdd) {
-            student.disciplines.push({
-                name: majorToAdd,
-                grades: [],
-                avgGradeDisc: 0
-            });
-            await student.save();
+        if (disciplineToAdd) {
+
+            if (student.disciplines.length > 9) {
+                return res.render("errorPage", { error: "The disciplines are alerady 10!" });
+            }
+
+            studentMethods.AddDisciplineToStudent(student, disciplineToAdd);
         }
 
-        if (majorDeleteNote) {
-            const indexOfMajorDelete = GetIndexOfMajorByName(student.disciplines, majorDeleteNote);
-            
-            if (indexOfMajorDelete == -1) {
+        if (disciplineDeleteNote) {
+            const indexOfDisciplineDelete = FindDisciplineIndexByName(student.disciplines, disciplineDeleteNote);
+
+            if (indexOfDisciplineDelete === -1) {
                 return res.render("errorPage", {error: "Invalid  major for deleting note!"});
             }
 
@@ -91,16 +100,13 @@ async function ModifyStudent(req, res) {
                 return res.render("errorPage", {error: "Please enter valid note to delete!"});
             }
 
-            let majorToModify = student.disciplines[indexOfMajorDelete];
-            majorToModify.grades.remove(noteToDelete);
-            majorToModify.avgGradeDisc = SetPrecision(GetAvgGrade(majorToModify.grades), PRECISION);
-            await student.save();
+            studentMethods.DeleteNoteOfDiscipline(student, indexOfDisciplineDelete, noteToDelete)
         }
 
-        if (majorAddNote) {
-            const indexOfMajorAdd = GetIndexOfMajorByName(student.disciplines, majorAddNote);
+        if (disciplineAddNote) {
+            const indexOfDisciplineAdd = FindDisciplineIndexByName(student.disciplines, disciplineAddNote);
 
-            if (indexOfMajorAdd == -1) {
+            if (indexOfDisciplineAdd == -1) {
                 return res.render("errorPage", {error: "Invalid  major for adding note!"});
             }
 
@@ -109,23 +115,31 @@ async function ModifyStudent(req, res) {
                 return res.render("errorPage", {error: "Please enter valid note to add!"});
             }
 
-            let majorToModify = student.disciplines[indexOfMajorAdd];
-            majorToModify.grades.push(noteToAdd);
-            majorToModify.avgGradeDisc = SetPrecision(GetAvgGrade(majorToModify.grades), PRECISION);
-            await student.save();
+            studentMethods.AddNoteToDiscipline(student, indexOfDisciplineAdd, noteToAdd);
         }
 
         console.log(student);
-        res.redirect(`/students/${studentId}`);
+        await student.save();
+
+        return res.redirect(`/students/${studentId}`);
     } catch (err) {
         console.log(err);
-        res.render("errorPage", {error: err.message});
+        return res.render("errorPage", {error: err.message});
     }
-    
 }
 
+// ------------- Render Create Controller ------------- \\
+
 async function RenderCreateStudentPage(req, res) {
-    return res.render("create");
+    try {
+        if (req.isAuthenticated()) {
+            return res.render("create");
+        } else {
+            return res.render("errorPage", { error: "You aren't authorized for this action!" });
+        }
+    } catch (error) {
+        return res.render("errorPage", {error: err.message});
+    }
 }
 
 async function CreateStudent(req, res) {
@@ -145,32 +159,18 @@ async function CreateStudent(req, res) {
 
         await newStudent.save();
 
-        res.redirect(`/students/${newStudent.id}`)
+        return res.redirect(`/students/${newStudent.id}`)
 
     } catch (err) {
         console.log(err);
-        res.render("errorPage", {error: err.message});
+        return res.render("errorPage", {error: err.message});
     }
 }
 
-// function RandomTrueOrFalse() {
-//     return Math.floor(Math.random() * 2) == 1;
-// }
-
-// const studentList = []
-// for (let i = 0; i < 10; i++) {
-//     const newStudent = new Student(CreateTestStudent(RandomTrueOrFalse()));
-//     studentList.push(newStudent);
-// }
-
-// Student.insertMany(studentList, (err) => {
-//     if (err) console.log(err.message);
-// });
-
 module.exports = {
-    FindStudents,
+    RenderStudentsPage,
     FindStudentsPage,
-    FindOneStudent,
+    RenderSigleStudentPage,
     ModifyStudent,
     CreateStudent,
     RenderCreateStudentPage

@@ -60,8 +60,8 @@ app.get("/logout", AdminsController.LogOutAdmin)
 
 // --------------------- Students --------------------- \\
 
-app.get("/students", StudentsController.FindStudents);
-app.get("/students/:id", StudentsController.FindOneStudent);
+app.get("/students", StudentsController.RenderStudentsPage);
+app.get("/students/:id", StudentsController.RenderSigleStudentPage);
 
 app.post("/modifyStudent", StudentsController.ModifyStudent);
 

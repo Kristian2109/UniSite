@@ -123,7 +123,7 @@ function CreateEmail(fName, lName) {
 }
 
 module.exports = {
-    GetPrecision: SetPrecision,
+    SetPrecision,
     Random, 
     CreateEmail, 
     CreateRandomSubjectsList, 
