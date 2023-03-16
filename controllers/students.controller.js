@@ -1,5 +1,7 @@
 const { Student, majorModel: Major } = require("../model/database");
 const studentMethods = require("../model/students.model");
+const fs = require("fs");
+const path = require("path");
 
 
 // Minor helper function I don't want to import
@@ -156,6 +158,19 @@ async function CreateStudent(req, res) {
             idNumber,
             email,
         });
+
+        const imagePath = path.join(__dirname, "../public/images/studentImages/", newStudent.photoPath);
+
+        fs.readFile(imagePath, (err, data) => {
+            if (err) throw err;
+          
+            console.log(data);
+            newStudent.photo.image = {
+                data: data,
+                contentType: "image/jpg"
+            }
+        });
+        console.log(req.file);
 
         await newStudent.save();
 

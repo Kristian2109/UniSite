@@ -33,7 +33,7 @@ const Admin = mongoose.model("Admin", adminSchema);
 
 const imageSchema = new mongoose.Schema({
     title: String,
-    relativePath: String
+    relativePath: String,
 });
 
 const newsSchema = new mongoose.Schema({
@@ -94,6 +94,13 @@ const studentsSchema = new mongoose.Schema({
     lName: String,
     email: String,
     idNumber: String,
+    photo: {
+        name: String,
+        image: {
+            data: Buffer,
+            contentType: String
+        }
+    },
     photoPath: String,
     rank: Number,
     group: {

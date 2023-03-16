@@ -77,4 +77,4 @@ app.post("/createStudent", upload.single("studentPhoto"), StudentsController.Cre
 // });
 app.listen(PORT, () => {
         console.log(`Server is listening on port ${PORT}!`);
-    });
+});

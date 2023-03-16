@@ -15,7 +15,8 @@
         <div class="student row">
             <% const imgName = student.photoPath; %>
             <% rank++; %>
-            <img class="student-img" src="/images/studentImages/<%=imgName%>" alt="<%=imgName%>">
+            <img class="student-img" src="data:image/<%=student.photo.image.contentType%>;base64,
+            <%=student.photo.image.data.toString('base64')%>">" alt="<%=imgName%>">
             <p class="rank col-lg-1"><%=rank%></p>
             <h4 class="student-name col-lg-3"><%=student.fName + " " + student.lName%></h4>
             <p class="col-lg-1">
