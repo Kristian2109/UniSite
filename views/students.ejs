@@ -13,10 +13,12 @@
         <% let rank = 0; %>
         <% students.forEach(student => { %>
         <div class="student row">
-            <% const imgName = student.photoPath; %>
             <% rank++; %>
-            <img class="student-img" src="data:image/<%=student.photo.image.contentType%>;base64,
-            <%=student.photo.image.data.toString('base64')%>">" alt="<%=imgName%>">
+            <% let imgSource = "default" %>
+            <%if (student.image.data) { %>
+                <% imgSource = "data:image/image/jpg;base64," + student.image.data.toString('base64'); %>
+            <% } %>
+            <img class="student-img" src="<%=imgSource%>" alt="<%=student.id%>">
             <p class="rank col-lg-1"><%=rank%></p>
             <h4 class="student-name col-lg-3"><%=student.fName + " " + student.lName%></h4>
             <p class="col-lg-1">

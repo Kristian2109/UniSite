@@ -1,9 +1,11 @@
 <%- include("partials/header") %>
 
     <div id="student-container" class="student-container">
-        <% photoName = student.photoPath; %>
-        <img class="full-img-student" src="/images/studentImages/<%=photoName%>" alt="<%=photoName%>">
-        <% const fullName = student.fName + " " + student.lName; %>
+        <% let imgSource = "default" %>
+        <%if (student.image.data) { %>
+            <% imgSource = "data:image/image/jpg;base64," + student.image.data.toString('base64'); %>
+        <% } %>
+        <img class="full-img-student" src="<%=imgSource%>" alt="<%=student.id%>"><% const fullName = student.fName + " " + student.lName; %>
         <div class="student-info">
             <div class="main-info">
                 <p class="name"><%=fullName%></p>

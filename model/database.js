@@ -94,12 +94,9 @@ const studentsSchema = new mongoose.Schema({
     lName: String,
     email: String,
     idNumber: String,
-    photo: {
-        name: String,
-        image: {
-            data: Buffer,
-            contentType: String
-        }
+    image: {
+        data: Buffer,
+        contentType: String
     },
     photoPath: String,
     rank: Number,

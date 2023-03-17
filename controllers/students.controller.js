@@ -154,26 +154,19 @@ async function CreateStudent(req, res) {
             specialty: major,
             disciplines: [],
             avgGrade: 0,
-            photoPath: req.file.filename,
             idNumber,
             email,
         });
 
-        const imagePath = path.join(__dirname, "../public/images/studentImages/", newStudent.photoPath);
-
-        fs.readFile(imagePath, (err, data) => {
-            if (err) throw err;
-          
-            console.log(data);
-            newStudent.photo.image = {
-                data: data,
-                contentType: "image/jpg"
-            }
-        });
-        console.log(req.file);
+        if (req.file) {
+            const imagePath = path.join(__dirname, "../public/images/", req.file.filename);
+            const data = fs.readFileSync(imagePath);
+    
+            newStudent.image.data = data;
+            newStudent.image.contentType = "image/jpg";
+        }
 
         await newStudent.save();
-
         return res.redirect(`/students/${newStudent.id}`)
 
     } catch (err) {
