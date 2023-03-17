@@ -1,7 +1,7 @@
 <%- include("partials/header") %>
 
     <div id="student-container" class="student-container">
-        <% let imgSource = "default" %>
+        <% let imgSource = "Default.jpg" %>
         <%if (student.image.data) { %>
             <% imgSource = "data:image/image/jpg;base64," + student.image.data.toString('base64'); %>
         <% } %>

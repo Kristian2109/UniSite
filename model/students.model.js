@@ -14,9 +14,15 @@ function AddDisciplineToStudent(student, disciplineToAdd) {
 
 function UpdateStudentAverageGrade(student) {
 
-    const newAvgGrade = student.disciplines.reduce((acc, disc) => {
+    const sumOfGrades = student.disciplines.reduce((acc, disc) => {
         return acc + disc.avgGradeDisc;
-    }, 0) / student.disciplines.length;
+    }, 0);
+
+    const countSubjectsWithGrade = student.disciplines.reduce((acc, disc) => {
+        return (disc.avgGradeDisc == 0) ? acc : acc + 1;
+    }, 0);
+
+    const newAvgGrade = sumOfGrades / countSubjectsWithGrade;
 
     student.avgGrade = SetPrecision(newAvgGrade, PRECISION);
 }
@@ -57,9 +63,6 @@ async function InsertRandomStudents(count) {
         await newStudent.save();
     }
 }
-
-//InsertRandomStudents();
-
 
 module.exports = {
     AddDisciplineToStudent,

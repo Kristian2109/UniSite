@@ -1,5 +1,8 @@
 <%- include("partials/header") %>
 
+    <% if (admin) { %>
+        <a class="create-student-button btn btn-warning btn-large" href="/createStudent">Add student</a>
+    <% } %>
     <div id="students-container">
         <div class="columns-header row">
             <p class="img-header">Image</p>
@@ -14,7 +17,7 @@
         <% students.forEach(student => { %>
         <div class="student row">
             <% rank++; %>
-            <% let imgSource = "default" %>
+            <% let imgSource = "Default.jpg" %>
             <%if (student.image.data) { %>
                 <% imgSource = "data:image/image/jpg;base64," + student.image.data.toString('base64'); %>
             <% } %>

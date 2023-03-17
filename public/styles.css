@@ -224,6 +224,10 @@ p.group {
     font: 600 30px/30px 'Work Sans';
 }
 
+.create-student-button {
+    position: absolute;
+}
+
 .student:hover {
     background-color: #FAD6A5;
 }

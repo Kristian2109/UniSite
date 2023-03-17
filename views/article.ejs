@@ -7,7 +7,7 @@
         <div class="images-container">
             <% article.images.forEach(image => { %>
                 <h3 class="img-title"><%=image.title%></h3>
-                <img class="full-img" src="/images/newsImages/<%=image.relativePath%>" alt="<%=image.title%>">
+                <img class="full-img" src="data:image/image/jpg;base64,<%=image.data.toString('base64')%>" alt="<%=image.title%>">
             <% }); %>
         </div>
      </div>

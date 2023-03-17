@@ -20,7 +20,7 @@ async function RenderStudentsPage(req, res) {
     try {
         const students = await Student.find({});
         const sortedStudents = students.sort((a, b) => b.avgGrade - a.avgGrade);
-        res.render("students", {students: sortedStudents});
+        res.render("students", {students: sortedStudents, admin: req.user});
     } catch (error) {
         console.error(error.message);
         res.redirect("/");

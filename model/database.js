@@ -31,18 +31,17 @@ const Admin = mongoose.model("Admin", adminSchema);
 
 // ------------------ News ------------------
 
-const imageSchema = new mongoose.Schema({
-    title: String,
-    relativePath: String,
-});
-
 const newsSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
     },
     content: String,
-    images: [imageSchema]
+    images: [{
+        name: String,
+        data: Buffer,
+        contentType: String
+    }]
 });
 
 const News = mongoose.model("New", newsSchema);
