@@ -1,6 +1,6 @@
 <h1>Student Information Web project</h1>
-<h2>Build using NodeJS, Express and MongoDB/h2>
-<h2>Frontend - EJS, JavaScript, HTML, CSS and Bootstrap<h2>
+<h2>Build using NodeJS, Express and MongoDB</h2>
+<h2>Frontend - EJS, JavaScript, HTML, CSS and Bootstrap</h2>
 
 <h2>Description</h2>
 <p>The site imitates a student information app, where the user can see a student ranklist, register as an admin, login, read articles and create students.</p>
@@ -8,7 +8,7 @@
 <p>There are many cool features like authentication, authorization, advanced hasing, https, sessions, cookies, ecnrypted connetion and others.<p>
 
 <h3>Link to the hosted site: https://student-project.onrender.com/ </h3>
-<h4>The site loads after 1-2 minutes because the hosting service need to load</h4>
+<h4>The site loads after 1-2 minutes because the hosting service needs to load</h4>
 <p>For login, name: kristian.petrov1998gmail.com, pass: 123.</p>
 
 <h3>Packages</h3>
