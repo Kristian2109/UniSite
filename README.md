@@ -7,7 +7,11 @@
 <p>Serve side rendering<p>
 <p>There are many cool features like authentication, authorization, advanced hasing, https, sessions, cookies, ecnrypted connetion and others.<p>
 
-<h3>Packages<h3>
+<h3>Link to the hosted site: https://student-project.onrender.com/ </h3>
+<h4>The site loads after 1-2 minutes because the hosting service need to load</h4>
+<p>For login, name: kristian.petrov1998gmail.com, pass: 123.</p>
+
+<h3>Packages</h3>
 <p>Mongoose, express, passport, passport-local, session, multer and others<p>
 
 <h1>Functionalities<h1>
